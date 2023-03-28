@@ -50,9 +50,6 @@ const Register = () => {
   return (
     <section>
       <h1>Register User</h1>
-      {usernameFocus ? "true" : "false"}
-      {passwordFocus ? "true" : "false"}
-      {passwordConfirmationFocus ? "true" : "false"}
       <form action="" onSubmit={handleSubmit}>
         <label htmlFor="username">
           Username
