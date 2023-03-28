@@ -12,10 +12,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const USERNAME_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const Register = () => {
-  const usernameRef = useRef();
+  const emailRef = useRef();
   const errorRef = useRef();
+
+  const [email, setEmail] = useState("");
+  const [validEmail, setValidEmail] = useState(false);
 
   const [username, setUsername] = useState("");
   const [validUsername, setValidUsername] = useState(false);
@@ -35,10 +39,22 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validEmail = EMAIL_REGEX.test(email);
     const validUsername = USERNAME_REGEX.test(username);
     const validPassword = PASSWORD_REGEX.test(password);
-    if (!validUsername || !validPassword) {
-      setErrorMessage("Username or password is invalid");
+
+    if (!validEmail) {
+      setErrorMessage("Email is invalid");
+      return;
+    }
+
+    if (!validUsername) {
+      setErrorMessage("Username is invalid");
+      return;
+    }
+
+    if (!validPassword) {
+      setErrorMessage("Password is invalid");
       return;
     }
 
@@ -47,10 +63,13 @@ const Register = () => {
       return;
     }
 
-    setSuccess(true);
+    
     setUsername("");
+    setEmail("");
     setPassword("");
     setPasswordConfirmation("");
+
+    setSuccess(true);
 
     setTimeout(() => {
       setErrorMessage("");
@@ -58,8 +77,12 @@ const Register = () => {
   };
 
   useEffect(() => {
-    usernameRef.current.focus();
+    emailRef.current.focus();
   }, []);
+
+  useEffect(() => {
+    setValidEmail(EMAIL_REGEX.test(email));
+  }, [email]);
 
   useEffect(() => {
     setValidUsername(USERNAME_REGEX.test(username));
@@ -69,6 +92,10 @@ const Register = () => {
     setValidPassword(PASSWORD_REGEX.test(password));
     setValidMatchPassword(password === passwordConfirmation);
   }, [password, passwordConfirmation]);
+
+  useEffect(() => {
+    setErrorMessage("");
+  }, [email, username, password, passwordConfirmation]);
 
   return (
     <>
@@ -86,6 +113,27 @@ const Register = () => {
           </p>
           <h1>Register User</h1>
           <form action="" onSubmit={handleSubmit}>
+            <label htmlFor="email">
+              Email
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validEmail ? "valid" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={validEmail || !email ? "hide" : "invalid"}
+              />
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              ref={emailRef}
+              required
+              autoComplete="off"
+            />
             <label htmlFor="username">
               Username
               <FontAwesomeIcon
@@ -104,7 +152,6 @@ const Register = () => {
               onChange={(e) => setUsername(e.target.value)}
               required
               autoComplete="off"
-              ref={usernameRef}
               onFocus={() => setUsernameFocus(true)}
               onBlur={() => setUsernameFocus(false)}
               aria-invalid={!validUsername ? "true" : "false"}
