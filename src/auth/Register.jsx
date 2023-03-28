@@ -72,8 +72,11 @@ const Register = () => {
           ref={usernameRef}
           onFocus={() => setUsernameFocus(true)}
           onBlur={() => setUsernameFocus(false)}
+          aria-invalid={!validUsername ? "true" : "false"}
+          aria-describedby="usernameNote"
         />{" "}
         <p
+          id="usernameNote"
           className={
             username && usernameFocus && !validUsername
               ? "instructions"
@@ -108,8 +111,11 @@ const Register = () => {
           autoComplete="off"
           onFocus={() => setPasswordFocus(true)}
           onBlur={() => setPasswordFocus(false)}
+          aria-invalid={!validPassword ? "true" : "false"}
+          aria-describedby="passwordNote"
         />{" "}
         <p
+          id="passwordNote"
           className={
             password && passwordFocus && !validPassword
               ? "instructions"
@@ -154,8 +160,11 @@ const Register = () => {
           autoComplete="off"
           onFocus={() => setPasswordConfirmationFocus(true)}
           onBlur={() => setPasswordConfirmationFocus(false)}
+          aria-invalid={!validMatchPassword ? "true" : "false"}
+          aria-describedby="passwordConfirmationNote"
         />{" "}
         <p
+          id="passwordConfirmationNote"
           className={
             passwordConfirmation &&
             passwordConfirmationFocus &&
