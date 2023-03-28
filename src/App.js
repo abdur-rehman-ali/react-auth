@@ -1,8 +1,10 @@
+import Register from "./auth/Register";
+
 const App = () => {
   return (
-    <div>
-      <h1>Hello react auth</h1>
-    </div>
+    <main className="App">
+      <Register/>
+    </main>
   );
 }
 
