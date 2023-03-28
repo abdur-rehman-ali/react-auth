@@ -143,7 +143,6 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              autoComplete="off"
               onFocus={() => setPasswordFocus(true)}
               onBlur={() => setPasswordFocus(false)}
               aria-invalid={!validPassword ? "true" : "false"}
@@ -196,7 +195,6 @@ const Register = () => {
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
               required
-              autoComplete="off"
               onFocus={() => setPasswordConfirmationFocus(true)}
               onBlur={() => setPasswordConfirmationFocus(false)}
               aria-invalid={!validMatchPassword ? "true" : "false"}
