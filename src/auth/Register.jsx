@@ -8,11 +8,13 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "../api/axios";
 
 const USERNAME_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const REGISTER_URL = "/users";
 
 const Register = () => {
   const emailRef = useRef();
@@ -37,7 +39,7 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validEmail = EMAIL_REGEX.test(email);
     const validUsername = USERNAME_REGEX.test(username);
@@ -63,13 +65,31 @@ const Register = () => {
       return;
     }
 
-    
-    setUsername("");
-    setEmail("");
-    setPassword("");
-    setPasswordConfirmation("");
+    try {
+      const payload = {
+        user: {
+          email,
+          username,
+          password,
+        },
+      };
+      const response = await axios.post(REGISTER_URL, payload);
+      console.log(response);
 
-    setSuccess(true);
+      setUsername("");
+      setEmail("");
+      setPassword("");
+      setPasswordConfirmation("");
+
+      setSuccess(true);
+    } catch (error) {
+      if(!error.response){
+        setErrorMessage("Server not connected");
+      }else{
+        setErrorMessage(error.response.data.errors[0])
+      }
+      errorRef.current.focus()
+    }
 
     setTimeout(() => {
       setErrorMessage("");
