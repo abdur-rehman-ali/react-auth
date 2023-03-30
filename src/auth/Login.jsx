@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 
 import axios from "../api/axios";
+import { AuthContext } from "../context/AuthProvider";
 
 const LOGIN_URL = "/users/sign_in";
 
 const Login = () => {
+  const { auth, setAuth } = useContext(AuthContext);
+
   const emailRef = useRef();
 
   const [email, setEmail] = useState("");
@@ -35,8 +38,11 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-      const accessToken = response.headers.get('Authorization').split(' ')[1];
-      localStorage.setItem('accessToken', accessToken);
+      let userName = response.data.data["username"];
+      let userEmail = response.data.data["email"];
+      setAuth({ userName, userEmail });
+      const accessToken = response.headers.get("Authorization").split(" ")[1];
+      localStorage.setItem("accessToken", accessToken);
 
       setEmail("");
       setPassword("");
@@ -59,6 +65,7 @@ const Login = () => {
       {success ? (
         <section>
           <h1>You are logged in!</h1>
+          {auth?.userName} - {auth?.userEmail}
           <p>
             <a href="#">Go to Home</a>
           </p>
