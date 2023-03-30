@@ -1,9 +1,12 @@
+
+import Login from "./auth/Login";
 import Register from "./auth/Register";
 
 const App = () => {
   return (
     <main className="App">
-      <Register/>
+      {/* <Register/> */}
+      <Login/>
     </main>
   );
 }
