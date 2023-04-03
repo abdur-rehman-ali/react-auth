@@ -1,13 +1,6 @@
-
-import Login from "./auth/Login";
-import Register from "./auth/Register";
-
 const App = () => {
   return (
-    <main className="App">
-      {/* <Register/> */}
-      <Login/>
-    </main>
+    <h1>Hello</h1>
   );
 }
 
