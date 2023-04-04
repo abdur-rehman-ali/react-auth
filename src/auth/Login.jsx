@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import  { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 import axios from "../api/axios";
-import { AuthContext } from "../context/AuthProvider";
+import useAuth from "../hooks/useAuth";
 
 const LOGIN_URL = "/users/sign_in";
 
 const Login = () => {
-  const { auth, setAuth } = useContext(AuthContext);
-
+  const { auth, setAuth } = useAuth()
   const emailRef = useRef();
 
   const [email, setEmail] = useState("");
@@ -41,7 +40,8 @@ const Login = () => {
       });
       let userName = response.data.data["username"];
       let userEmail = response.data.data["email"];
-      setAuth({ userName, userEmail });
+      let userRole = response.data.data["role"];
+      setAuth({ userName, userEmail, userRole });
       const accessToken = response.headers.get("Authorization").split(" ")[1];
       localStorage.setItem("accessToken", accessToken);
 
@@ -66,7 +66,7 @@ const Login = () => {
       {success ? (
         <section>
           <h1>You are logged in!</h1>
-          {auth?.userName} - {auth?.userEmail}
+          {auth?.userName} - {auth?.userEmail} - {auth?.userRole}
           <p>
             <Link to="/">Go to Home</Link>
           </p>
