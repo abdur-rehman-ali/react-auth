@@ -1,5 +1,5 @@
-import  { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
@@ -7,13 +7,13 @@ import useAuth from "../hooks/useAuth";
 const LOGIN_URL = "/users/sign_in";
 
 const Login = () => {
-  const { auth, setAuth } = useAuth()
+  const navigate = useNavigate();
+  const { setAuth } = useAuth();
   const emailRef = useRef();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const Login = () => {
 
       setEmail("");
       setPassword("");
-      setSuccess(true);
+      navigate("/");
     } catch (error) {
       if (!error.response) {
         setErrorMessage("Server not responding");
@@ -62,51 +62,37 @@ const Login = () => {
   }, [email, password]);
 
   return (
-    <>
-      {success ? (
-        <section>
-          <h1>You are logged in!</h1>
-          {auth?.userName} - {auth?.userEmail} - {auth?.userRole}
-          <p>
-            <Link to="/">Go to Home</Link>
-          </p>
-        </section>
-      ) : (
-        <section>
-          <h1>Login page</h1>
-          <p className={errorMessage ? "errmsg" : "offscreen"}>
-            {errorMessage}
-          </p>
+    <section>
+      <h1>Login page</h1>
+      <p className={errorMessage ? "errmsg" : "offscreen"}>{errorMessage}</p>
 
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              ref={emailRef}
-            />
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button>Login</button>
-          </form>
-          <span>
-            Didn't have account yet ? <br />
-            <Link to="/register">Register</Link>
-          </span>
-        </section>
-      )}
-    </>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          ref={emailRef}
+        />
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button>Login</button>
+      </form>
+      <span>
+        Didn't have account yet ? <br />
+        <Link to="/register">Register</Link>
+      </span>
+    </section>
   );
 };
 
